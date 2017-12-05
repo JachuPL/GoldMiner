@@ -1,7 +1,6 @@
-package services;
+package abstractions.services;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
@@ -18,6 +17,7 @@ public abstract class JSONLoaderService<T> extends DataLoaderService<T>
         _readEntities = new ArrayList<T>();
     }
 
+    @Override
     public List<T> Load()
     {
         JSONParser parser = new JSONParser();
@@ -27,12 +27,10 @@ public abstract class JSONLoaderService<T> extends DataLoaderService<T>
             JSONArray jsonArray = (JSONArray) obj;
             for (Object item : jsonArray)
                 NodeProcessingCallback(item);
-
-
         }
         catch(Exception ex)
         {
-
+            ex.printStackTrace();
         }
 
         return _readEntities;

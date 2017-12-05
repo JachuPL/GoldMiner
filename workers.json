@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Pan Wiesław",
+    "baseCost": 125.0,
+    "unitsPerSec": 4
+  },
+  {
+    "id": 2,
+    "name": "Kilof",
+    "baseCost": 19.90,
+    "unitsPerSec": 1
+  }
+]

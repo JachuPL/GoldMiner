@@ -33,8 +33,9 @@ public abstract class AbstractWorker extends Entity {
     public double getUnitsPerSecMultiplier() { return _unitsPerSecMultiplier; }
     public double getCostMultiplier() { return _costMultiplier; }
     public double getPrice() { return _baseCost * getCostMultiplier() * Math.pow(1.15, _level); }
-    public AbstractWorker(String name, int level, double baseCost, double baseUnitsPerSec)
+    public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec)
     {
+        super(id);
         ValidateName(name);
         _name = name;
         ValidateLevel(level);

@@ -11,19 +11,16 @@ public abstract class AbstractBoost extends Entity {
     private double _value;
     private long _duration;
     private long _started;
-    private AbstractWorker _owner;
 
     public double Value() { return _value; }
     public BoostCategory Category() { return _category; }
     public BoostType Type() { return _type; }
     public long Duration() { return _duration; }
     public long Started() { return _started; }
-    public AbstractWorker Owner() { return _owner; }
 
 
-    public AbstractBoost(AbstractWorker owner, BoostCategory category, BoostType type, double value, long duration) {
-        ValidateOwner(owner);
-        _owner = owner;
+    public AbstractBoost(int id, BoostCategory category, BoostType type, double value, long duration) {
+        super(id);
         ValidateCategory(category);
         _category = category;
         ValidateType(type);
@@ -64,11 +61,6 @@ public abstract class AbstractBoost extends Entity {
             default:
                 throw new IllegalArgumentException("boost category out of range");
         }
-    }
-
-    private void ValidateOwner(AbstractWorker owner) {
-        if (owner == null)
-            throw new IllegalArgumentException("owner is null");
     }
 
     public boolean shouldExpire(){
