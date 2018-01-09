@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Kilof",
+    "baseCost": 19.90,
+    "unitsPerSec": 1
+  },
+  {
+    "id": 2,
+    "name": "Pan Janusz",
+    "baseCost": 1300.0,
+    "unitsPerSec": 10
+  },
+  {
+    "id": 3,
+    "name": "Spychacz",
+    "baseCost": 38000.0,
+    "unitsPerSec": 100
+  },
+  {
+    "id": 4,
+    "name": "Semtex",
+    "baseCost": 100000.0,
+    "unitsPerSec": 1000
+  },
+  {
+    "id": 5,
+    "name": "Biełaz",
+    "baseCost": 38950000.0,
+    "unitsPerSec": 54000
+  }
+]
