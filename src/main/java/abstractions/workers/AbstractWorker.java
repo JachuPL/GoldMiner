@@ -5,6 +5,7 @@ import abstractions.actionPossibility.*;
 import abstractions.boosts.AbstractBoost;
 import abstractions.boosts.BoostCategory;
 import abstractions.boosts.BoostType;
+import javafx.scene.image.Image;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ public abstract class AbstractWorker extends Entity {
     protected double _unitsPerSecMultiplier;
     protected double _costMultiplier;
     private String _desc;
+    private Image _image;
 
     public String getName() { return _name; }
     public int getLevel() { return _level; }
@@ -33,7 +35,8 @@ public abstract class AbstractWorker extends Entity {
     public double getUnitsPerSecMultiplier() { return _unitsPerSecMultiplier; }
     public double getCostMultiplier() { return _costMultiplier; }
     public double getPrice() { return _baseCost * getCostMultiplier() * Math.pow(1.15, _level); }
-    public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec)
+    public Image getImage() { return _image; }
+    public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec, Image image)
     {
         super(id);
         ValidateName(name);
@@ -44,10 +47,18 @@ public abstract class AbstractWorker extends Entity {
         _baseCost = baseCost;
         ValidateUnitsPerSec(baseUnitsPerSec);
         _baseUnitsPerSec = baseUnitsPerSec;
+        ValidateImage(image);
+        _image = image;
 
         _boosts = new LinkedHashSet<AbstractBoost>();
         _costMultiplier = 1;
         _unitsPerSecMultiplier = 1;
+    }
+
+    private void ValidateImage(Image image)
+    {
+        if (image == null)
+            throw new IllegalArgumentException("Image cannot be null");
     }
 
     private void ValidateUnitsPerSec(double baseUnitsPerSec) {
@@ -66,7 +77,7 @@ public abstract class AbstractWorker extends Entity {
     }
 
     private void ValidateName(String name) {
-        if (name == "")
+        if ("".equals(name))
             throw new IllegalArgumentException("name is null");
     }
 
