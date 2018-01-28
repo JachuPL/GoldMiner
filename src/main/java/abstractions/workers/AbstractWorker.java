@@ -50,7 +50,7 @@ public abstract class AbstractWorker extends Entity {
         ValidateImage(image);
         _image = image;
 
-        _boosts = new LinkedHashSet<AbstractBoost>();
+        _boosts = new LinkedHashSet<>();
         _costMultiplier = 1;
         _unitsPerSecMultiplier = 1;
     }

@@ -33,13 +33,32 @@ public class GameManager {
             throw new Exception("An error occured while reading boosts.json");
     }
 
+    public double computePotentialHarvest() {
+        return workers.stream().mapToDouble(f -> f.harvest()).sum();
+    }
+
     public void harvest(){
-        harvestedCoins += workers.stream().mapToDouble(f -> f.harvest()).sum();
+        harvestedCoins += computePotentialHarvest();
+    }
+
+    public double computePotentialHarvestOnClick(){
+        return workers.stream().mapToDouble(f -> f.harvestOnClick()).sum();
     }
 
     public void harvestOnClick() {
-        harvestedCoins += workers.stream().mapToDouble(f -> f.harvestOnClick()).sum();
+        harvestedCoins += computePotentialHarvestOnClick();
         harvestedCoins += 1;
     }
 
+    public boolean upgrade(AbstractWorker worker){
+        if (getHarvestedCoins() < worker.getPrice())
+            return false;
+
+        harvestedCoins -= worker.getPrice();
+        worker.upgrade();
+
+        return true;
+    }
+
+    public void expireBoosts(){ workers.stream().forEach(f -> f.expireBoosts()); }
 }
