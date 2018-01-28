@@ -10,11 +10,11 @@ import java.util.List;
 
 public abstract class JSONLoaderService<T> extends DataLoaderService<T>
 {
-    protected String _fileName;
+    private String _fileName;
     protected List<T> _readEntities;
     public JSONLoaderService(String fileName) {
         _fileName = fileName;
-        _readEntities = new ArrayList<T>();
+        _readEntities = new ArrayList<>();
     }
 
     @Override

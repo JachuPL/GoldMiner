@@ -33,7 +33,7 @@ public class WorkerControl extends TitledPane {
 
     private AbstractWorker worker;
 
-    public WorkerControl(AbstractWorker worker){
+    WorkerControl(AbstractWorker worker){
         this.worker = worker;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("WorkerControl.fxml"));

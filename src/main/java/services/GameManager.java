@@ -1,13 +1,9 @@
 package services;
 
 import abstractions.boosts.AbstractBoost;
-import abstractions.boosts.BoostType;
 import abstractions.workers.AbstractWorker;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
-import services.BoostService;
-import services.WorkerService;
 
 import java.io.File;
 import java.util.List;
@@ -20,12 +16,12 @@ public class GameManager {
 
     public static GameManager instance() { return game; }
 
-    public final String RESOURCES_BASE_PATH = "resources/";
-    public final String CONFIG_BASE_PATH = RESOURCES_BASE_PATH + "conf/";
+    private final String RESOURCES_BASE_PATH = "resources/";
+    private final String CONFIG_BASE_PATH = RESOURCES_BASE_PATH + "conf/";
     public final String GOLDEN_NUGGET_IMAGE_PATH = "images/zloto.png";
     public final String GOLDEN_NUGGET_IMAGE2_PATH = "images/zloto2.png";
-    public final String MUSIC_BASE_PATH = RESOURCES_BASE_PATH + "sounds/";
-    public final String BGM_PATH = MUSIC_BASE_PATH + "dark_rage.wav";
+    private final String MUSIC_BASE_PATH = RESOURCES_BASE_PATH + "sounds/";
+    private final String BGM_PATH = MUSIC_BASE_PATH + "dark_rage.wav";
 
     private WorkerService workerService = null;
     private BoostService boostService = null;
@@ -51,7 +47,7 @@ public class GameManager {
     }
 
     public double computePotentialHarvest() {
-        return workers.stream().mapToDouble(f -> f.harvest()).sum();
+        return workers.stream().mapToDouble(AbstractWorker::harvest).sum();
     }
 
     public void harvest(){
@@ -59,7 +55,7 @@ public class GameManager {
     }
 
     public double computePotentialHarvestOnClick(){
-        return workers.stream().mapToDouble(f -> f.harvestOnClick()).sum() + 1;
+        return workers.stream().mapToDouble(AbstractWorker::harvestOnClick).sum() + 1;
     }
 
     public void harvestOnClick() {
@@ -76,9 +72,9 @@ public class GameManager {
         return true;
     }
 
-    public void expireBoosts(){ workers.stream().forEach(f -> f.expireBoosts()); }
+    public void expireBoosts(){ workers.forEach(AbstractWorker::expireBoosts); }
 
-    public void startPlayingMusic(){
+    private void startPlayingMusic(){
             bgm = new MediaPlayer(new Media(new File(BGM_PATH).toURI().toString()));
             bgm.setOnEndOfMedia(() -> {
                 bgm.seek(bgm.getStartTime());

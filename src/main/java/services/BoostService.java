@@ -6,7 +6,7 @@ import model.Boost;
 import org.json.simple.JSONObject;
 
 public class BoostService extends JSONLoaderService<AbstractBoost> {
-    public BoostService(String fileName) {
+    BoostService(String fileName) {
         super(fileName);
     }
 

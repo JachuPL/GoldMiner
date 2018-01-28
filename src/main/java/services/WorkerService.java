@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 
 public class WorkerService extends JSONLoaderService<AbstractWorker> {
-    public WorkerService(String fileName) {
+    WorkerService(String fileName) {
         super(fileName);
     }
 

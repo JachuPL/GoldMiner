@@ -16,27 +16,24 @@ import java.util.stream.Collectors;
 public abstract class AbstractWorker extends Entity {
     private String _name;
     private int _level;
-    protected double _baseCost;
-    protected double _baseUnitsPerSec;
-    protected LinkedHashSet<AbstractBoost> _boosts;
-    protected double _unitsPerSecMultiplier;
-    protected double _costMultiplier;
+    private double _baseCost;
+    private double _baseUnitsPerSec;
+    private LinkedHashSet<AbstractBoost> _boosts;
+    private double _unitsPerSecMultiplier;
+    private double _costMultiplier;
     private Image _image;
     private MediaPlayer _sound;
 
     public String getName() { return _name; }
     public int getLevel() { return _level; }
-    public LinkedHashSet<AbstractBoost> getBoosts() { return _boosts; }
-    public double getUnitsPerSec() {
+    private double getUnitsPerSec() {
         double result = 0;
         if (_level > 0)
             result = _baseUnitsPerSec * Math.pow(1.67, _level - 1);
         return result;
     }
 
-    public double getUnitsPerSecMultiplier() { return _unitsPerSecMultiplier; }
-    public double getCostMultiplier() { return _costMultiplier; }
-    public double getPrice() { return _baseCost * getCostMultiplier() * Math.pow(1.15, _level); }
+    public double getPrice() { return _baseCost * _costMultiplier * Math.pow(1.15, _level); }
     public Image getImage() { return _image; }
 
     public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec, Image image, Media sound)
@@ -97,12 +94,12 @@ public abstract class AbstractWorker extends Entity {
 
     public double getBoostedUnitsPerSecForNonClicking() {
         List<AbstractBoost> constantOrTimedBoosts = _boosts.stream().filter(x -> x.Category() != BoostCategory.Click).collect(Collectors.toList());
-        return getUnitsPerSec() +  constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(boost -> boost.Value()).sum();
+        return getUnitsPerSec() +  constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(AbstractBoost::Value).sum();
     }
 
     public double getBoostedUnitsPerSecMultiplierForNonClicking() {
         List<AbstractBoost> constantOrTimedBoosts = _boosts.stream().filter(x -> x.Category() != BoostCategory.Click).collect(Collectors.toList());
-        return getUnitsPerSecMultiplier() + constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
+        return _unitsPerSecMultiplier + constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(AbstractBoost::Value).sum();
     }
 
     public double harvest(){
@@ -111,12 +108,12 @@ public abstract class AbstractWorker extends Entity {
 
     public double getBoostedUnitsPerSecForClicking(){
         List<AbstractBoost> clickingBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Click).collect(Collectors.toList());
-        return getUnitsPerSec() +  clickingBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(boost -> boost.Value()).sum();
+        return getUnitsPerSec() +  clickingBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(AbstractBoost::Value).sum();
     }
 
     public double getBoostedUnitsPerSecMultiplierForClicking(){
         List<AbstractBoost> clickingBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Click).collect(Collectors.toList());
-        return getUnitsPerSecMultiplier() + clickingBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
+        return _unitsPerSecMultiplier + clickingBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(AbstractBoost::Value).sum();
     }
 
     public double harvestOnClick() {

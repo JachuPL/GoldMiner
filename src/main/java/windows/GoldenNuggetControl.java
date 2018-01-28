@@ -4,7 +4,6 @@ import abstractions.boosts.AbstractBoost;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +25,6 @@ public class GoldenNuggetControl extends AnchorPane {
     @FXML private ImageView goldOuncesImage;
     @FXML private Label avgHarvestPerSecond;
     @FXML private Label avgHarvestPerClick;
-    @FXML private Button btnTestBoosts;
 
     public GoldenNuggetControl(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GoldenNuggetControl.fxml"));

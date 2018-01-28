@@ -7,7 +7,7 @@ public abstract class AbstractBoost extends Entity {
     protected BoostType _type;
     protected double _value;
     protected long _duration;
-    protected long _started;
+    private long _started;
 
     public double Value() { return _value; }
     public BoostCategory Category() { return _category; }
@@ -58,11 +58,8 @@ public abstract class AbstractBoost extends Entity {
         }
     }
 
-    public boolean shouldExpire(){
-        if (_category == BoostCategory.Timed)
-            return System.currentTimeMillis() > (_started + _duration);
-
-        return false;
+    public boolean shouldExpire() {
+        return _category == BoostCategory.Timed && System.currentTimeMillis() > (_started + _duration);
     }
 
     @Override
