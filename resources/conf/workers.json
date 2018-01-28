@@ -9,14 +9,30 @@
   },
   {
     "id": 2,
-    "name": "Pan Janusz",
+    "name": "Sensor metanu",
+    "baseCost": 229.0,
+    "unitsPerSec": 0.66,
+    "icon": "images/sensor.png",
+    "sound": "resources/sounds/sonar.wav"
+  },
+  {
+    "id": 3,
+    "name": "Związkowcy",
     "baseCost": 1300.0,
     "unitsPerSec": 10,
     "icon": "images/zwiazkowcy.png",
     "sound": "resources/sounds/applause.wav"
   },
   {
-    "id": 3,
+    "id": 4,
+    "name": "Wózek na urobek",
+    "baseCost": 27500,
+    "unitsPerSec": 30,
+    "icon": "images/wozek.png",
+    "sound": "resources/sounds/wozek.wav"
+  },
+  {
+    "id": 5,
     "name": "Spychacz",
     "baseCost": 38000.0,
     "unitsPerSec": 100,
@@ -24,7 +40,7 @@
     "sound": "resources/sounds/bobcat.wav"
   },
   {
-    "id": 4,
+    "id": 6,
     "name": "Semtex",
     "baseCost": 100000.0,
     "unitsPerSec": 1000,
@@ -32,7 +48,7 @@
     "sound": "resources/sounds/semtex.wav"
   },
   {
-    "id": 5,
+    "id": 7,
     "name": "Biełaz",
     "baseCost": 38950000.0,
     "unitsPerSec": 54000,

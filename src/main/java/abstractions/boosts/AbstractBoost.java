@@ -92,7 +92,7 @@ public abstract class AbstractBoost extends Entity {
         long s = duration.getSeconds();
 
         if (_category == BoostCategory.Timed)
-            completeString += String.format(" przez następne %02d:%02d", (s%3600)/60, s%60);
+            completeString += String.format("\nprzez następne %02d:%02d", (s%3600)/60, s%60);
 
         return completeString;
     }
