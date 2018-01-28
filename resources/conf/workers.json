@@ -4,34 +4,39 @@
     "name": "Kilof",
     "baseCost": 19.90,
     "unitsPerSec": 1,
-    "icon": "images/kilof.png"
+    "icon": "images/kilof.png",
+    "sound": "resources/sounds/pickaxe.wav"
   },
   {
     "id": 2,
     "name": "Pan Janusz",
     "baseCost": 1300.0,
     "unitsPerSec": 10,
-    "icon": "images/zwiazkowcy.png"
+    "icon": "images/zwiazkowcy.png",
+    "sound": "resources/sounds/applause.wav"
   },
   {
     "id": 3,
     "name": "Spychacz",
     "baseCost": 38000.0,
     "unitsPerSec": 100,
-    "icon": "images/spychacz.png"
+    "icon": "images/spychacz.png",
+    "sound": "resources/sounds/bobcat.wav"
   },
   {
     "id": 4,
     "name": "Semtex",
     "baseCost": 100000.0,
     "unitsPerSec": 1000,
-    "icon": "images/bonba.png"
+    "icon": "images/bonba.png",
+    "sound": "resources/sounds/semtex.wav"
   },
   {
     "id": 5,
     "name": "Biełaz",
     "baseCost": 38950000.0,
     "unitsPerSec": 54000,
-    "icon": "images/bielaz.png"
+    "icon": "images/bielaz.png",
+    "sound": "resources/sounds/truck.wav"
   }
 ]

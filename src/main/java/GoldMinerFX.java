@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -36,7 +37,7 @@ public class GoldMinerFX extends Application {
         GridPane root = new GridPane();
 
         try {
-            game.initializeSets();
+            game.boot();
             buildGui(root);
         }
         catch(Exception e) {
@@ -137,6 +138,7 @@ public class GoldMinerFX extends Application {
                 if (game.upgrade(worker)) {
                     updateWorkerLabels(worker, workerLevelText, workerPriceText);
                     alert.setHeaderText("Zakup " + worker.getName() + " zakończony sukcesem.");
+                    worker.playSound();
                     updateScore();
                 }
                 else {

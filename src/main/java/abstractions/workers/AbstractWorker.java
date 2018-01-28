@@ -6,6 +6,8 @@ import abstractions.boosts.AbstractBoost;
 import abstractions.boosts.BoostCategory;
 import abstractions.boosts.BoostType;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,8 +21,8 @@ public abstract class AbstractWorker extends Entity {
     protected LinkedHashSet<AbstractBoost> _boosts;
     protected double _unitsPerSecMultiplier;
     protected double _costMultiplier;
-    private String _desc;
     private Image _image;
+    private MediaPlayer _sound;
 
     public String getName() { return _name; }
     public int getLevel() { return _level; }
@@ -36,7 +38,8 @@ public abstract class AbstractWorker extends Entity {
     public double getCostMultiplier() { return _costMultiplier; }
     public double getPrice() { return _baseCost * getCostMultiplier() * Math.pow(1.15, _level); }
     public Image getImage() { return _image; }
-    public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec, Image image)
+
+    public AbstractWorker(int id, String name, int level, double baseCost, double baseUnitsPerSec, Image image, Media sound)
     {
         super(id);
         ValidateName(name);
@@ -49,10 +52,17 @@ public abstract class AbstractWorker extends Entity {
         _baseUnitsPerSec = baseUnitsPerSec;
         ValidateImage(image);
         _image = image;
+        ValidateSound(sound);
+        _sound = new MediaPlayer(sound);
 
         _boosts = new LinkedHashSet<>();
         _costMultiplier = 1;
         _unitsPerSecMultiplier = 1;
+    }
+
+    private void ValidateSound(Media sound) {
+        if (sound == null)
+            throw new IllegalArgumentException("Sound cannot be null");
     }
 
     private void ValidateImage(Image image)
@@ -123,5 +133,10 @@ public abstract class AbstractWorker extends Entity {
             throw new IllegalArgumentException(canAdd.reason());
 
         _boosts.add(boost);
+    }
+
+    public void playSound() {
+        _sound.play();
+        _sound.seek(_sound.getStartTime());
     }
 }
