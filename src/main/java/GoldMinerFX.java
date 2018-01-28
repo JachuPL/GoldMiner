@@ -1,9 +1,9 @@
+import abstractions.boosts.AbstractBoost;
 import abstractions.workers.AbstractWorker;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -12,12 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.text.DecimalFormat;
 
 
@@ -81,7 +79,6 @@ public class GoldMinerFX extends Application {
             buildWorkerGui(root, worker, row++);
 
         buildGoldenNugget(root);
-
         buildScore(root);
     }
 
@@ -102,6 +99,14 @@ public class GoldMinerFX extends Application {
             event.consume();
             if (event.getButton() == MouseButton.PRIMARY) {
                 game.harvestOnClick();
+                AbstractBoost boost = game.tryApplyRandomBoost(null);
+                if (boost != null){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Bonus!");
+                    alert.setHeaderText("Otrzymano bonus:\n" + boost.toString());
+
+                    alert.show();
+                }
                 updateScore();
             }
         });
@@ -128,41 +133,36 @@ public class GoldMinerFX extends Application {
     }
 
     private void applyImageViewEvents(ImageView workerIcon, Label workerLevelText, Label workerPriceText, AbstractWorker worker) {
-        workerIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                event.consume();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Kupno pracownika");
+        workerIcon.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            event.consume();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Kupno pracownika");
 
-                if (game.upgrade(worker)) {
-                    updateWorkerLabels(worker, workerLevelText, workerPriceText);
-                    alert.setHeaderText("Zakup " + worker.getName() + " zakończony sukcesem.");
-                    worker.playSound();
-                    updateScore();
-                }
-                else {
-                    alert.setHeaderText("Nie możesz sobie pozwolić na zakup " + worker.getName() + ".");
-                }
-                alert.show();
+            if (game.upgrade(worker)) {
+                alert.setHeaderText("Zakup " + worker.getName() + " zakończony sukcesem.");
 
+                AbstractBoost boost = game.tryApplyRandomBoost(worker);
+                if (boost != null)
+                    alert.setContentText("Dodatkowo otrzymano bonus:\n" + boost.toString());
+
+                updateWorkerLabels(worker, workerLevelText, workerPriceText);
+                worker.playSound();
+                updateScore();
             }
+            else {
+                alert.setHeaderText("Nie możesz sobie pozwolić na zakup " + worker.getName() + ".");
+            }
+            alert.show();
         });
 
-        workerIcon.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                workerIcon.setFitWidth(workerIcon.getFitWidth() + 5);
-                workerIcon.setFitHeight(workerIcon.getFitHeight() + 5);
-            }
+        workerIcon.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            workerIcon.setFitWidth(workerIcon.getFitWidth() + 5);
+            workerIcon.setFitHeight(workerIcon.getFitHeight() + 5);
         });
 
-        workerIcon.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                workerIcon.setFitWidth(workerIcon.getFitWidth() - 5);
-                workerIcon.setFitHeight(workerIcon.getFitHeight() - 5);
-            }
+        workerIcon.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            workerIcon.setFitWidth(workerIcon.getFitWidth() - 5);
+            workerIcon.setFitHeight(workerIcon.getFitHeight() - 5);
         });
     }
 

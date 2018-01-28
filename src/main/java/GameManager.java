@@ -9,6 +9,7 @@ import services.WorkerService;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 public class GameManager {
     public final String RESOURCES_BASE_PATH = "resources/";
@@ -23,6 +24,7 @@ public class GameManager {
     private List<AbstractBoost> boosts = null;
     private double harvestedCoins = 0;
     private MediaPlayer bgm;
+    private Random randomGenerator = new Random();
 
     public List<AbstractWorker> getWorkers() { return workers; }
     public List<AbstractBoost> getBoosts() { return boosts; }
@@ -82,5 +84,36 @@ public class GameManager {
     public void boot() throws Exception {
         initializeSets();
         startPlayingMusic();
+    }
+
+    public AbstractBoost tryApplyRandomBoost(AbstractWorker worker) {
+        int baseChance = 5;     // default chance is 5%
+        int maxChance = 100;
+
+        if (worker == null) {
+            maxChance *= 10;    // decrease chance if applying by click
+            baseChance *= 2;    // make it at least 1%
+            int workerIndex = randomGenerator.nextInt(workers.size());
+            worker = workers.get(workerIndex);
+            if (worker.getLevel() == 0)
+                return null;
+        }
+
+        AbstractBoost boost = null;
+
+        if (baseChance >= randomGenerator.nextInt(maxChance))
+        {
+            int boostIndex = randomGenerator.nextInt(boosts.size());
+            boost = boosts.get(boostIndex);
+
+            try {
+                worker.addBoost(boost);
+            }
+            catch(IllegalArgumentException ex){
+                tryApplyRandomBoost(worker);
+            }
+        }
+
+        return boost;
     }
 }

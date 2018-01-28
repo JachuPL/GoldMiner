@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "category": "Timed",
+    "type": "Multiplier",
+    "value": 1.0,
+    "duration": 60
+  },
+  {
+    "id": 2,
+    "category": "Constant",
+    "type": "BaseValue",
+    "value": 1.1,
+    "duration": 720
+  }
+]

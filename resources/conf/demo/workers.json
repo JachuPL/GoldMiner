@@ -2,8 +2,8 @@
   {
     "id": 1,
     "name": "Kilof",
-    "baseCost": 100.00,
-    "unitsPerSec": 0.37,
+    "baseCost": 19.90,
+    "unitsPerSec": 1.0,
     "icon": "images/kilof.png",
     "sound": "resources/sounds/pickaxe.wav"
   },

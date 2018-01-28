@@ -1,13 +1,10 @@
 package abstractions.boosts;
-
 import abstractions.Entity;
-import abstractions.workers.AbstractWorker;
-
-import java.util.Date;
+import java.time.Duration;
 
 public abstract class AbstractBoost extends Entity {
-    private BoostCategory _category = BoostCategory.Click;
-    private BoostType _type = BoostType.Multiplier;
+    private BoostCategory _category;
+    private BoostType _type;
     private double _value;
     private long _duration;
     private long _started;
@@ -15,9 +12,6 @@ public abstract class AbstractBoost extends Entity {
     public double Value() { return _value; }
     public BoostCategory Category() { return _category; }
     public BoostType Type() { return _type; }
-    public long Duration() { return _duration; }
-    public long Started() { return _started; }
-
 
     public AbstractBoost(int id, BoostCategory category, BoostType type, double value, long duration) {
         super(id);
@@ -27,9 +21,10 @@ public abstract class AbstractBoost extends Entity {
         _type = type;
         ValidateValue(value);
         _value = value;
-        _started = System.currentTimeMillis();
         ValidateDuration(duration);
         _duration = duration;
+
+        _started = System.currentTimeMillis();
     }
 
     private void ValidateDuration(long duration) {
@@ -68,5 +63,40 @@ public abstract class AbstractBoost extends Entity {
             return System.currentTimeMillis() > (_started + _duration);
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String categoryString = "";
+        switch(_category){
+            case Timed:
+                categoryString = "czasowo";
+                break;
+            case Click:
+                categoryString = "przy kliknięciu";
+                break;
+            case Constant:
+                categoryString = "na stałe";
+        }
+
+        String typeString = "";
+        switch(_type){
+            case Multiplier:
+                typeString = "mnożnik";
+                break;
+            case BaseValue:
+                typeString = "wartość podstawowa";
+                break;
+        }
+
+        String completeString = typeString + " " + ((_value > 0) ? "+" : "-") + _value + " " + categoryString;
+
+        Duration duration = Duration.ofMillis(_duration);
+        long s = duration.getSeconds();
+
+        if (_category == BoostCategory.Timed)
+            completeString += String.format(" przez następne %02d:%02d", (s%3600)/60, s%60);
+
+        return completeString;
     }
 }
