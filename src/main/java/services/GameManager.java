@@ -1,3 +1,5 @@
+package services;
+
 import abstractions.boosts.AbstractBoost;
 import abstractions.boosts.BoostType;
 import abstractions.workers.AbstractWorker;
@@ -15,6 +17,7 @@ public class GameManager {
     public final String RESOURCES_BASE_PATH = "resources/";
     public final String CONFIG_BASE_PATH = RESOURCES_BASE_PATH + "conf/";
     public final String GOLDEN_NUGGET_IMAGE_PATH = "images/zloto.png";
+    public final String GOLDEN_NUGGET_IMAGE2_PATH = "images/zloto2.png";
     public final String MUSIC_BASE_PATH = RESOURCES_BASE_PATH + "sounds/";
     public final String BGM_PATH = MUSIC_BASE_PATH + "dark_rage.wav";
 
