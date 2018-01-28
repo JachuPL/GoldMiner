@@ -1,0 +1,7 @@
+out/
+
+\.idea/artifacts/GoldMiner_jar\.xml
+
+\.idea/workspace\.xml
+
+target/classes/

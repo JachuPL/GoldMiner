@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import windows.GoldenNuggetControl?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="windows.WorkersController">
+   <children>
+      <SplitPane fx:id="splitter" dividerPositions="0.65" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <items>
+          <AnchorPane fx:id="workerAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="240.0" prefWidth="298.0">
+               <children>
+                  <Accordion fx:id="workersAccordion" cacheHint="SCALE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="404.0" snapToPixel="false" />
+               </children>
+            </AnchorPane>
+            <GoldenNuggetControl fx:id="goldenNuggetControl"/>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>
