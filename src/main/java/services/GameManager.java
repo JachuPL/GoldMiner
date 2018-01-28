@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Random;
 
 public class GameManager {
+    private static GameManager game = new GameManager();
+
+    private GameManager(){ }
+
+    public static GameManager instance() { return game; }
+
     public final String RESOURCES_BASE_PATH = "resources/";
     public final String CONFIG_BASE_PATH = RESOURCES_BASE_PATH + "conf/";
     public final String GOLDEN_NUGGET_IMAGE_PATH = "images/zloto.png";
@@ -30,10 +36,9 @@ public class GameManager {
     private Random randomGenerator = new Random();
 
     public List<AbstractWorker> getWorkers() { return workers; }
-    public List<AbstractBoost> getBoosts() { return boosts; }
     public double getHarvestedCoins() { return harvestedCoins; }
 
-    public void initializeSets() throws Exception {
+    private void initializeSets() throws Exception {
         workerService = new WorkerService(CONFIG_BASE_PATH + "workers.json");
         workers = workerService.Load();
         if (workers.size() == 0)
@@ -54,12 +59,11 @@ public class GameManager {
     }
 
     public double computePotentialHarvestOnClick(){
-        return workers.stream().mapToDouble(f -> f.harvestOnClick()).sum();
+        return workers.stream().mapToDouble(f -> f.harvestOnClick()).sum() + 1;
     }
 
     public void harvestOnClick() {
         harvestedCoins += computePotentialHarvestOnClick();
-        harvestedCoins += 1;
     }
 
     public boolean upgrade(AbstractWorker worker){
@@ -110,6 +114,7 @@ public class GameManager {
             boost = boosts.get(boostIndex);
 
             try {
+                boost = boost.clone();
                 worker.addBoost(boost);
             }
             catch(IllegalArgumentException ex){

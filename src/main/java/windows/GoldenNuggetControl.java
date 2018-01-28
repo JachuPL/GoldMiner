@@ -4,6 +4,7 @@ import abstractions.boosts.AbstractBoost;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,14 +20,15 @@ public class GoldenNuggetControl extends AnchorPane {
     private static final DecimalFormat doubleValueFormat = new DecimalFormat("0.00");
     private static final double MODIFIED_PIXELS_ON_INTERACT = 6;
     private static final double MODIFIED_PIXELS_ON_CLICK = 3;
-    @FXML public ImageView goldenNuggetImage;
-    @FXML public Label gatheredOunces;
-    @FXML public ImageView goldOuncesImage;
 
-    private GameManager game;
+    @FXML private ImageView goldenNuggetImage;
+    @FXML private Label gatheredOunces;
+    @FXML private ImageView goldOuncesImage;
+    @FXML private Label avgHarvestPerSecond;
+    @FXML private Label avgHarvestPerClick;
+    @FXML private Button btnTestBoosts;
 
     public GoldenNuggetControl(){
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GoldenNuggetControl.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -39,21 +41,20 @@ public class GoldenNuggetControl extends AnchorPane {
         }
     }
 
-    public void configure(GameManager game){
-        this.game = game;
-        goldenNuggetImage.setImage(new Image(game.GOLDEN_NUGGET_IMAGE_PATH));
+    public void configure(){
+        goldenNuggetImage.setImage(new Image(GameManager.instance().GOLDEN_NUGGET_IMAGE_PATH));
         goldenNuggetImage.setFitHeight(150);
         goldenNuggetImage.setFitWidth(150);
 
-        goldOuncesImage.setImage(new Image(game.GOLDEN_NUGGET_IMAGE2_PATH));
+        goldOuncesImage.setImage(new Image(GameManager.instance().GOLDEN_NUGGET_IMAGE2_PATH));
     }
 
     @FXML private void onMouseClicked(MouseEvent event){
         event.consume();
         if (event.getButton() == MouseButton.PRIMARY) {
-            game.harvestOnClick();
+            GameManager.instance().harvestOnClick();
             updateScore();
-            AbstractBoost boost = game.tryApplyRandomBoost(null);
+            AbstractBoost boost = GameManager.instance().tryApplyRandomBoost(null);
             if (boost != null){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Bonus!");
@@ -78,6 +79,8 @@ public class GoldenNuggetControl extends AnchorPane {
     }
 
     public void updateScore(){
-        gatheredOunces.setText(doubleValueFormat.format(game.getHarvestedCoins()) + " uncji");
+        gatheredOunces.setText(doubleValueFormat.format(GameManager.instance().getHarvestedCoins()) + " uncji");
+        avgHarvestPerClick.setText("Średnio " + doubleValueFormat.format(GameManager.instance().computePotentialHarvestOnClick()) + " / kliknięcie");
+        avgHarvestPerSecond.setText("Średnio " + doubleValueFormat.format(GameManager.instance().computePotentialHarvest()) + " / sekundę");
     }
 }

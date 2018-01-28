@@ -3,11 +3,11 @@ import abstractions.Entity;
 import java.time.Duration;
 
 public abstract class AbstractBoost extends Entity {
-    private BoostCategory _category;
-    private BoostType _type;
-    private double _value;
-    private long _duration;
-    private long _started;
+    protected BoostCategory _category;
+    protected BoostType _type;
+    protected double _value;
+    protected long _duration;
+    protected long _started;
 
     public double Value() { return _value; }
     public BoostCategory Category() { return _category; }
@@ -99,4 +99,6 @@ public abstract class AbstractBoost extends Entity {
 
         return completeString;
     }
+
+    public abstract AbstractBoost clone();
 }

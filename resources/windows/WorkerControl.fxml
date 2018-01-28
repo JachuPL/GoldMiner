@@ -6,9 +6,13 @@
 <?import javafx.scene.image.ImageView?>
 <fx:root type="TitledPane" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml">
-    <AnchorPane fx:id="workerAnchorPane">
-        <ImageView fx:id="workerImage" fitHeight="100" fitWidth="100" onMouseClicked="#onMouseClicked" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited"/>
-        <Label fx:id="workerPrice" />
-        <Label fx:id="workerLevel"/>
+    <AnchorPane fx:id="anchorPane">
+        <ImageView fx:id="image" fitHeight="100" fitWidth="100" onMouseClicked="#onMouseClicked" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited"/>
+        <Label fx:id="price" />
+        <Label fx:id="level"/>
+        <Label fx:id="nonClickingBase" text="Ten pracownik obecnie nie generuje przychodu."/>
+        <Label fx:id="nonClickingMultiplier" text="Ten pracownik obecnie nie generuje przychodu."/>
+        <Label fx:id="clickingBase" text="Ten pracownik obecnie nie generuje przychodu."/>
+        <Label fx:id="clickingMultiplier" text="Ten pracownik obecnie nie generuje przychodu."/>
     </AnchorPane>
 </fx:root>

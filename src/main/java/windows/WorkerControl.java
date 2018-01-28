@@ -17,22 +17,24 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 public class WorkerControl extends TitledPane {
-    private static final Font WORKER_PRICE_FONT = Font.font("Arial", 16);
-    private static final Font WORKER_LEVEL_FONT = Font.font("Arial", 24);
+    private static final Font PRICE_FONT = Font.font("Arial", 16);
+    private static final Font LEVEL_FONT = Font.font("Arial", 24);
     private static final double MODIFIED_PIXELS_ON_INTERACT = 5;
     private static final DecimalFormat doubleValueFormat = new DecimalFormat("0.00");
 
-    @FXML private Label workerLevel;
-    @FXML private Label workerPrice;
-    @FXML private ImageView workerImage;
-    @FXML private AnchorPane workerAnchorPane;
+    @FXML private Label level;
+    @FXML private Label price;
+    @FXML private ImageView image;
+    @FXML private AnchorPane anchorPane;
+    @FXML private Label nonClickingBase;
+    @FXML private Label nonClickingMultiplier;
+    @FXML private Label clickingBase;
+    @FXML private Label clickingMultiplier;
 
     private AbstractWorker worker;
-    private GameManager game;
 
-    public WorkerControl(AbstractWorker worker, GameManager game){
+    public WorkerControl(AbstractWorker worker){
         this.worker = worker;
-        this.game = game;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("WorkerControl.fxml"));
 
@@ -49,18 +51,48 @@ public class WorkerControl extends TitledPane {
     }
 
     private void configure(){
-        setText(worker.getName() + " (Poziom " + worker.getLevel() + ")");
+        image.setImage(worker.getImage());
 
-        workerImage.setImage(worker.getImage());
-        
-        workerPrice.setText(doubleValueFormat.format(worker.getPrice()) + "$");
-        workerPrice.setFont(WORKER_PRICE_FONT);
-        workerPrice.setLayoutY(workerImage.getFitHeight());
-        
-        workerLevel.setText("Lv. " + worker.getLevel());
-        workerLevel.setFont(WORKER_LEVEL_FONT);
-        workerLevel.setLayoutX(workerImage.getFitWidth() + MODIFIED_PIXELS_ON_INTERACT);
-        workerLevel.setLayoutY(workerImage.getFitHeight() / 2);
+        price.setFont(PRICE_FONT);
+        price.setLayoutY(image.getFitHeight());
+
+        level.setFont(LEVEL_FONT);
+        level.setLayoutX(image.getFitWidth() + MODIFIED_PIXELS_ON_INTERACT);
+        level.setLayoutY(image.getFitHeight() / 2);
+
+        clickingBase.setLayoutX(level.getLayoutX() + level.getWidth() + 85);
+
+        clickingMultiplier.setLayoutX(clickingBase.getLayoutX());
+        clickingMultiplier.setLayoutY(clickingBase.getLayoutY() + 20);
+
+        nonClickingBase.setLayoutX(clickingMultiplier.getLayoutX());
+        nonClickingBase.setLayoutY(clickingMultiplier.getLayoutY() + 20);
+
+        nonClickingMultiplier.setLayoutX(nonClickingBase.getLayoutX());
+        nonClickingMultiplier.setLayoutY(nonClickingBase.getLayoutY() + 20);
+
+        update();
+    }
+
+    public void update(){
+        setText(worker.getName() + " (Poziom " + worker.getLevel() + ")");
+        price.setText(doubleValueFormat.format(worker.getPrice()) + "$");
+        level.setText("Lv. " + worker.getLevel());
+
+        if (worker.getLevel() > 0)
+        {
+            clickingBase.setText("Uncji za kliknięcie: " + doubleValueFormat.format(worker.getBoostedUnitsPerSecForClicking()));
+            clickingMultiplier.setText("Mnożnik uncji za kl.: " + doubleValueFormat.format(worker.getBoostedUnitsPerSecMultiplierForClicking()));
+            nonClickingBase.setText("Uncji na sekundę: " + doubleValueFormat.format(worker.getBoostedUnitsPerSecForNonClicking()));
+            nonClickingMultiplier.setText("Mnożnik uncji na sek.: " + doubleValueFormat.format(worker.getBoostedUnitsPerSecMultiplierForNonClicking()));
+        }
+        else
+        {
+            clickingBase.setText("Ten pracownik obecnie nie generuje przychodu.");
+            clickingMultiplier.setText("Ten pracownik obecnie nie generuje przychodu.");
+            nonClickingBase.setText("Ten pracownik obecnie nie generuje przychodu.");
+            nonClickingMultiplier.setText("Ten pracownik obecnie nie generuje przychodu.");
+        }
     }
 
     @FXML private void onMouseClicked(MouseEvent event){
@@ -68,16 +100,14 @@ public class WorkerControl extends TitledPane {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kupno pracownika");
 
-        if (game.upgrade(worker)) {
+        if (GameManager.instance().upgrade(worker)) {
             alert.setHeaderText("Zakup " + worker.getName() + " zakończony sukcesem.");
 
-            AbstractBoost boost = game.tryApplyRandomBoost(worker);
+            AbstractBoost boost = GameManager.instance().tryApplyRandomBoost(worker);
             if (boost != null)
                 alert.setContentText("Dodatkowo otrzymano bonus:\n" + boost.toString());
 
-            workerLevel.setText("Lv. " + worker.getLevel());
-            setText(worker.getName() + " (Poziom " + worker.getLevel() + ")");
-            workerPrice.setText(worker.getPrice() + "$");
+            update();
             worker.playSound();
         }
         else {
@@ -87,12 +117,12 @@ public class WorkerControl extends TitledPane {
     }
 
     @FXML public void onMouseEntered(){
-        workerImage.setFitWidth(workerImage.getFitWidth() + MODIFIED_PIXELS_ON_INTERACT);
-        workerImage.setFitHeight(workerImage.getFitHeight() + MODIFIED_PIXELS_ON_INTERACT);
+        image.setFitWidth(image.getFitWidth() + MODIFIED_PIXELS_ON_INTERACT);
+        image.setFitHeight(image.getFitHeight() + MODIFIED_PIXELS_ON_INTERACT);
     }
 
     @FXML public void onMouseExited(){
-        workerImage.setFitWidth(workerImage.getFitWidth() - MODIFIED_PIXELS_ON_INTERACT);
-        workerImage.setFitHeight(workerImage.getFitHeight() - MODIFIED_PIXELS_ON_INTERACT);
+        image.setFitWidth(image.getFitWidth() - MODIFIED_PIXELS_ON_INTERACT);
+        image.setFitHeight(image.getFitHeight() - MODIFIED_PIXELS_ON_INTERACT);
     }
 }

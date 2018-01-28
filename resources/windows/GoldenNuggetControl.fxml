@@ -12,4 +12,6 @@
     <Label fx:id="gatheredOunces" layoutX="21.0" layoutY="577.0" text="0 uncji"/>
     <ImageView fx:id="goldOuncesImage" fitHeight="15.0" fitWidth="14.0" layoutX="7.0" layoutY="577.0"
                pickOnBounds="true" preserveRatio="true"/>
+    <Label fx:id="avgHarvestPerSecond" layoutX="21.0" layoutY="557.0"/>
+    <Label fx:id="avgHarvestPerClick" layoutX="21.0" layoutY="537.0"/>
 </fx:root>

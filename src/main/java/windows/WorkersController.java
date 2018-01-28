@@ -9,7 +9,6 @@ import services.GameManager;
 import java.util.List;
 
 public class WorkersController {
-    private final GameManager game = new GameManager();
     private final double SPLITTER_PCT_POS = 0.65;
 
     @FXML private Accordion workersAccordion;
@@ -27,19 +26,29 @@ public class WorkersController {
         workersAccordion.prefWidthProperty().bind(splitter.widthProperty().multiply(0.65));
 
         for(AbstractWorker worker : workers)
-            workersAccordion.getPanes().add(new WorkerControl(worker, game));
+            workersAccordion.getPanes().add(new WorkerControl(worker));
     }
 
     public void boot() throws Exception {
-        game.boot();
-        buildWorkersGui(game.getWorkers());
-        goldenNuggetControl.configure(game);
+        GameManager.instance().boot();
+        buildWorkersGui(GameManager.instance().getWorkers());
+        goldenNuggetControl.configure();
         goldenNuggetControl.updateScore();
     }
 
     public void tick() {
-        game.harvest();
-        game.expireBoosts();
+        GameManager.instance().harvest();
+        GameManager.instance().expireBoosts();
         goldenNuggetControl.updateScore();
+        for(TitledPane control : workersAccordion.getPanes())
+        {
+            try{
+                WorkerControl control1 = (WorkerControl) control;
+                control1.update();
+            }
+            catch(ClassCastException ex){
+                ex.printStackTrace();
+            }
+        }
     }
 }

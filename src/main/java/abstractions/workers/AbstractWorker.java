@@ -95,24 +95,36 @@ public abstract class AbstractWorker extends Entity {
         _level++;
     }
 
-    public double harvest(){
-        List<AbstractBoost> constantOrTimedBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Constant || x.Category() == BoostCategory.Timed).collect(Collectors.toList());
-        double boostedUnitsPerSec = getUnitsPerSec() +  constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
-        double boostedUnitsPerSecMultiplier = getUnitsPerSecMultiplier() + constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
+    public double getBoostedUnitsPerSecForNonClicking() {
+        List<AbstractBoost> constantOrTimedBoosts = _boosts.stream().filter(x -> x.Category() != BoostCategory.Click).collect(Collectors.toList());
+        return getUnitsPerSec() +  constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(boost -> boost.Value()).sum();
+    }
 
-        return boostedUnitsPerSec * boostedUnitsPerSecMultiplier;
+    public double getBoostedUnitsPerSecMultiplierForNonClicking() {
+        List<AbstractBoost> constantOrTimedBoosts = _boosts.stream().filter(x -> x.Category() != BoostCategory.Click).collect(Collectors.toList());
+        return getUnitsPerSecMultiplier() + constantOrTimedBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
+    }
+
+    public double harvest(){
+        return getBoostedUnitsPerSecForNonClicking() * getBoostedUnitsPerSecMultiplierForNonClicking();
+    }
+
+    public double getBoostedUnitsPerSecForClicking(){
+        List<AbstractBoost> clickingBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Click).collect(Collectors.toList());
+        return getUnitsPerSec() +  clickingBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(boost -> boost.Value()).sum();
+    }
+
+    public double getBoostedUnitsPerSecMultiplierForClicking(){
+        List<AbstractBoost> clickingBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Click).collect(Collectors.toList());
+        return getUnitsPerSecMultiplier() + clickingBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
     }
 
     public double harvestOnClick() {
-        List<AbstractBoost> clickingBoosts = _boosts.stream().filter(x -> x.Category() == BoostCategory.Click).collect(Collectors.toList());
-        double boostedClickValue = getUnitsPerSec() +  clickingBoosts.stream().filter(x -> x.Type() == BoostType.BaseValue).mapToDouble(boost -> boost.Value()).sum();
-        double boostedClickValueMultiplier = getUnitsPerSecMultiplier() + clickingBoosts.stream().filter(x -> x.Type() == BoostType.Multiplier).mapToDouble(boost -> boost.Value()).sum();
-
-        return boostedClickValue * boostedClickValueMultiplier;
+        return getBoostedUnitsPerSecForClicking() * getBoostedUnitsPerSecMultiplierForClicking();
     }
 
     public void expireBoosts() {
-        _boosts.removeAll(_boosts.stream().filter(x -> x.shouldExpire()).collect(Collectors.toList()));
+        _boosts.removeIf(AbstractBoost::shouldExpire);
     }
 
     private IActionPossible canAddBoost(AbstractBoost boost)
